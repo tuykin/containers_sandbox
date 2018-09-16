@@ -7,18 +7,18 @@ get '/location' do
 end
 
 class Location
-  attr_reader :ipaddr, :lat, :lon, :city, :region, :contry
+  attr_reader :ipaddr, :lat, :lon, :city, :region, :country
 
   def initialize(location)
     @ipaddr = location.data['ip']
-    @lat, @len = request.location.data['loc'].split(',')
+    @lat, @len = location.data['loc']&.split(',')
     @city = location.data['city']
     @region = location.data['region']
     @country = location.data['country']
   end
 
   def show
-    location = [city, region, country].reject(&:empty?).join(', ')
+    location = [city, region, country].compact.reject(&:empty?).join(', ')
     "#{ipaddr}: #{location}"
   end
 end
